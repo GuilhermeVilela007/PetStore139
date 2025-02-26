@@ -1,5 +1,6 @@
 // 1 - Bibliotecas
 using System.ComponentModel;
+using Models;
 using Newtonsoft.Json; //dependencia para o JsonConvert
 using RestSharp;
 
@@ -14,6 +15,10 @@ public class PetTest
     private const string BASE_URL = "https://petstore.swagger.io/v2/";
 
    // 3.2 - Funções e Métodos
+
+   //Função de leitura de dados a partir de um arquivo CSV
+
+   
    [Test, Order(1)]
    public void PostPetTest()
    {
@@ -34,7 +39,10 @@ public class PetTest
 
       //Valide que na resposta, o status code é igual ao resultado esperado(200)
       Assert.That((int)response.StatusCode, Is.EqualTo(200)); //Valida se o retorno vai ser positivo(nesse caso 200)
-      
+      // Valida o PetId
+      int petId = responseBody.id;
+      Assert.That(petId, Is.EqualTo(1647765));
+
       //valida o nome do animal
       String name = responseBody.name.ToString();
       Assert.That(name, Is.EqualTo("Marci"));
@@ -44,6 +52,8 @@ public class PetTest
       //valida o STTS do animal na resposta
       String status = responseBody.status.ToString();
       Assert.That(status, Is.EqualTo("meu amor"));
+
+      Environment.SetEnvironmentVariable("petId", petId.ToString());// Armazena os dados obtidos para usar nos proximos testes
 
    }
 
@@ -80,15 +90,57 @@ public class PetTest
    {
       // Configura
       // Os dados de entrada vão formar o body da alteração
+      PetModel petModel = new PetModel();
+      petModel.id = 1647765;
+      petModel.category = new Category(1, "MINHA");
+      petModel.name = "Marci";
+      petModel.photoUrls = new String[]{""};
+      petModel.tags = new Tag[]{new Tag(1, "Só minhaaaaa")};
+                            //,new Tag(1, "Só minhaaaaa")};
+      petModel.status = "Minha Vida";
 
+      // Transforma o modelo ACIMA em um arquivo Json
+      String jsonBody = JsonConvert.SerializeObject(petModel, Formatting.Indented); // nesse caso vai MONTAR um JSON
+      Console.WriteLine(jsonBody);
+
+      var client = new RestClient(BASE_URL);
+      var request = new RestRequest("pet", Method.Put);
+      request.AddBody(jsonBody);
 
       // Executa
-
+      var response = client.Execute(request);
+      
       // VAlida
+      var responseBody = JsonConvert.DeserializeObject<dynamic>(response.Content);
+      Console.WriteLine(responseBody);
 
+      Assert.That((int)response.StatusCode, Is.EqualTo(200));
+      Assert.That((int)responseBody.id, Is.EqualTo(1647765));
+      Assert.That((String)responseBody.tags[0].name, Is.EqualTo(petModel.tags[0].name));
+      Assert.That((String)responseBody.status, Is.EqualTo(petModel.status));
 
    }
 
+   [Test, Order(4)]
+   public void DeletePetTest()
+   {
+      //configura
+      String petId = Environment.GetEnvironmentVariable("petId"); // muda o ID de string para numero novamente
+
+      var client = new RestClient(BASE_URL); // base url da API
+      var request = new RestRequest($"pet/{petId}", Method.Delete); // base da URL + o andpoint
+
+      // Executa
+      var response = client.Execute(request);
+
+      // Valida
+      var responseBody = JsonConvert.DeserializeObject<dynamic>(response.Content);
+      Assert.That((int)response.StatusCode, Is.EqualTo(200));
+      Assert.That((int)responseBody.code, Is.EqualTo(200));
+      Assert.That((String)responseBody.message, Is.EqualTo(petId));
+
+
+   }
 
 }
 
