@@ -75,5 +75,20 @@ public class PetTest
 
    }
 
+   [Test, Order(3)]
+   public void PutPetTest()
+   {
+      // Configura
+      // Os dados de entrada vão formar o body da alteração
+
+
+      // Executa
+
+      // VAlida
+
+
+   }
+
+
 }
 
