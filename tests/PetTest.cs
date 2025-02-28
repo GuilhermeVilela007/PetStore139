@@ -218,14 +218,14 @@ public class PetTest
       Assert.That((int)response.StatusCode, Is.EqualTo(200)); //Valida se o retorno vai ser positivo(nesse caso 200)
 
       // Valida o PetId     
-      Assert.That(responseBody.id, Is.EqualTo(petId));
+      Assert.That((int)responseBody.id, Is.EqualTo(petId));
 
       //valida o nome do animal
       
-      Assert.That(responseBody.name, Is.EqualTo(petName));
+      Assert.That((String)responseBody.name, Is.EqualTo(petName));
    
       //valida o STTS do animal na resposta
-      Assert.That(responseBody.status, Is.EqualTo(status));
+      Assert.That((String)responseBody.status, Is.EqualTo(status));
 
    }
 
