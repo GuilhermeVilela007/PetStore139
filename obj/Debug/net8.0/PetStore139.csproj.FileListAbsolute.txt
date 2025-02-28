@@ -98,4 +98,3 @@ C:\iterasys\PetStore139\obj\Debug\net8.0\refint\PetStore139.dll
 C:\iterasys\PetStore139\obj\Debug\net8.0\PetStore139.pdb
 C:\iterasys\PetStore139\obj\Debug\net8.0\PetStore139.genruntimeconfig.cache
 C:\iterasys\PetStore139\obj\Debug\net8.0\ref\PetStore139.dll
-C:\iterasys\PetStore139\obj\Debug\net8.0\PetStore139.sourcelink.json

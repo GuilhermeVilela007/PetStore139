@@ -1,2 +1,2 @@
-petid,categoryId,categoryName,petName,photoUrls,tagsIds,tagsNames,status
+petId,categoryId,categoryName,petName,photoUrls,tagsIds,tagsNames,status
 1234567,1,eu,Gui,,1;2,vacinado;castrado,da cici
