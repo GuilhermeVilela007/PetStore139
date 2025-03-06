@@ -229,5 +229,31 @@ public class PetTest
 
    }
 
+   [Test, Order(6)]
+   public void GetUserLoginTest()
+   {
+      //Configura
+      String username = "pedro";
+      String password = "teste";
+
+      var client = new RestClient(BASE_URL); // instancia o objeto do tipo RestClient com o endereço da API
+      var request = new RestRequest($"user/login?username={username}&password={password}", Method.Get); // intancia o objeto do tipo RestRequest com o complemento de endereço com o "pet" configurando o metodo para ser um POST
+      
+      //Executa
+      var response = client.Execute(request);
+
+      //Valida
+      var responseBody = JsonConvert.DeserializeObject<dynamic>(response.Content);
+
+      Assert.That((int)response.StatusCode, Is.EqualTo(200));
+      Assert.That((int)responseBody.code, Is.EqualTo(200));
+      String message = responseBody.message;
+      String token = message.Substring(message.LastIndexOf(":")+1); //pegar o token
+      Console.WriteLine($"Token = {token}");
+
+      Environment.SetEnvironmentVariable("token", token);
+
+   }
+
 }
 
